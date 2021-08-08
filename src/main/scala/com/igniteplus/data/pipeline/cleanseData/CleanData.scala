@@ -1,28 +1,40 @@
 package com.igniteplus.data.pipeline.cleanseData
 
-import com.igniteplus.data.pipeline.constants.ApplicationConstants.FILE_TYPE
+import com.igniteplus.data.pipeline.constants.ApplicationConstants.{FILE_TYPE, ITEM_ID, SEQ_CLICKSTREAM_PRIMARY_KEYS, SESSION_ID}
 import com.igniteplus.data.pipeline.service.FileWriterService.writeFile
 import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.{Column, DataFrame, functions}
-import org.apache.spark.sql.functions.{col, desc, initcap, row_number, trim, unix_timestamp}
+import org.apache.spark.sql.functions.{col, desc, initcap, row_number, trim, unix_timestamp, when}
 
 object CleanData
 {
-  def removeNull(df:DataFrame, columnName:Seq[String], filePath:String, fileFormat:String) : DataFrame =
-  {
+  def removeNull(df:DataFrame, columnName:Seq[String], filePath:String, fileFormat:String) : DataFrame = {
+
     var nullDf : DataFrame = df
     var notNullDf : DataFrame = df
-    for( i <- columnName)
-    {
+    for( i <- columnName) {
+
       nullDf = df.filter(df(i).isNull)
       notNullDf = df.filter(df(i).isNotNull)
     }
-    writeFile(nullDf, fileFormat, filePath)
+    if(nullDf.count()>0)
+      writeFile(nullDf, fileFormat, filePath)
     notNullDf
   }
-  def deDuplication(df : DataFrame, orderBy : String, colNames : String*) : DataFrame =
+
+
+  def checkForNull(df: DataFrame,colNames:Seq[String]):DataFrame=
   {
-    if(orderBy == "nil")
+    val changedColName:Seq[Column] = colNames.map(x=>col(x))
+    val condition:Column=changedColName.map(x=>x.isNull).reduce(_ || _)
+    val dfChanged=df.withColumn("nullFlag",when(condition,"true").otherwise("false"))
+    dfChanged.show()
+    dfChanged
+  }
+
+  def deDuplication(df : DataFrame, orderByColumn : String, colNames : String*) : DataFrame =
+  {
+    if(orderByColumn == "nil")
     {
       val deDuplicate : DataFrame = df.dropDuplicates(colNames.head, colNames.tail:_*)
       deDuplicate
@@ -30,7 +42,7 @@ object CleanData
     else
     {
         val winSpec = Window.partitionBy(colNames.head, colNames.tail: _*)
-                            .orderBy(desc(orderBy))
+                            .orderBy(desc(orderByColumn))
         val deDuplicate : DataFrame = df.withColumn("row_number", row_number().over(winSpec))
                                         .filter("row_number==1")
                                         .drop("row_number")

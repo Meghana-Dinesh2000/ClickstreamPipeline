@@ -1,7 +1,7 @@
 package com.igniteplus.data.pipeline.constants
 
 import com.igniteplus.data.pipeline.cleanseData.CleanData
-import com.igniteplus.data.pipeline.util.ApplicationUtil.sparkSessionCreate
+import com.igniteplus.data.pipeline.util.ApplicationUtil.createSparkSession
 import com.igniteplus.data.pipeline.service.FileReaderService.readFile
 
 
@@ -14,7 +14,7 @@ object ApplicationConstants
   //SPARK SESSION
   val MASTER_NAME:String="local"
   val APP_NAME:String="DE PRODUCT"
-  implicit val spark:SparkSession=sparkSessionCreate(MASTER_NAME,APP_NAME)
+  implicit val spark:SparkSession=createSparkSession(MASTER_NAME,APP_NAME)
 
   //LOCATION AND FILE TYPE
   val INPUT_LOCATION_CLICKSTREAM:String="data/Input/clickstream/clickstream_log.csv"
@@ -30,7 +30,8 @@ object ApplicationConstants
   val EVENT_TIMESTAMP:String = "event_timestamp"
   val REDIRECTION_SOURCE:String="redirection_source"
   val DEPARTMENT_NAME:String="department_name"
-
+  val SESSION_ID:String="session_id"
+  val ITEM_ID:String="item_id"
 
   /** CLICKSTREAM DATATYPE VALIDATION */
   val COL_TIMESTAMP:String = EVENT_TIMESTAMP
