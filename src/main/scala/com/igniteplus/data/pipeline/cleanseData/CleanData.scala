@@ -2,25 +2,24 @@ package com.igniteplus.data.pipeline.cleanseData
 
 import com.igniteplus.data.pipeline.service.FileWriterService.writeFile
 import org.apache.spark.sql.expressions.Window
-import org.apache.spark.sql. DataFrame
-import org.apache.spark.sql.functions.{col, desc,row_number, trim}
+import org.apache.spark.sql.{Column, DataFrame}
+import org.apache.spark.sql.functions.{col, desc, row_number, trim, when}
 
 object CleanData
 {
-  def removeNull (df : DataFrame, columnName : Seq[String], filePath : String, fileFormat : String) : DataFrame = {
-    var nullDf : DataFrame = df
-    var notNullDf : DataFrame = df
-    for( i <- columnName)
-    {
-      nullDf = df.filter(df(i).isNull)
-      notNullDf = df.filter(df(i).isNotNull)
-    }
-    if(nullDf.count() > 0)
-      writeFile(nullDf, fileFormat, filePath)
-    notNullDf
-  }
-
-/**Alternative for the previous function but not used as the execution time is more in this case
+//  def removeNull (df : DataFrame, columnName : Seq[String], filePath : String, fileFormat : String) : DataFrame = {
+//    var nullDf : DataFrame = df
+//    var notNullDf : DataFrame = df
+//    for( i <- columnName)
+//    {
+//      nullDf = df.filter(df(i).isNull)
+//      notNullDf = df.filter(df(i).isNotNull)
+//    }
+//    if(nullDf.count() > 0)
+//      writeFile(nullDf, fileFormat, filePath)
+//    notNullDf
+//  }
+  /**Alternative for the previous function but not used as the execution time is more in this case*/
   def checkForNull (df : DataFrame, columnNames : Seq[String], filePath : String, fileFormat : String) : DataFrame =
   {
     val changedColName : Seq[Column] = columnNames.map(x=>col(x))
@@ -31,7 +30,7 @@ object CleanData
     if(nullDf.count()>0)
       writeFile(nullDf, fileFormat, filePath)
     notNullDf
-  }*/
+  }
 
   /**Function to remove duplicates*/
   def deDuplication(df : DataFrame, orderByColumn : String, colNames : String*) : DataFrame =

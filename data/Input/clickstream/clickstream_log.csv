@@ -50170,3 +50170,5 @@ id,event_timestamp,device_type,session_id,visitor_id,item_id,redirection_source
 22975,11/15/2020 12:11,android,J99924,C5077,C8034,facebook
 47560,11/15/2020 21:02,android,J99928,F9760,B6627,google
 47506,11/15/2020 21:02,android,J99928,F9760,I1394,facebook
+,11/15/2020 11:02,web,J99928,F9760,,pinterest
+,11/16/2020 11:32,web,J99897,I3389,,pinterest
