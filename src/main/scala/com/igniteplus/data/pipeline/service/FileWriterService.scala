@@ -1,7 +1,10 @@
 package com.igniteplus.data.pipeline.service
 
 import com.igniteplus.data.pipeline.exception.FileWriterException
+import org.apache.hadoop.hdfs.protocol.proto.HdfsProtos.HdfsFileStatusProto.FileType
 import org.apache.spark.sql.DataFrame
+
+import java.io.FileWriter
 
 object FileWriterService
 {
@@ -18,5 +21,18 @@ object FileWriterService
       case e: Exception => FileWriterException("Unable to write files to the location "+ s"$filePath")
     }
   }
-
+  def generalWrite(content : String, filePath:String) : Unit=
+    {
+      try
+        {
+          val fw = new FileWriter(filePath,true)
+          fw.write(content)
+          fw.write("\n")
+          fw.close()
+        }
+      catch
+        {
+          case e: Exception => FileWriterException("Unable to write wiles to the location" +s"$filePath")
+        }
+    }
 }

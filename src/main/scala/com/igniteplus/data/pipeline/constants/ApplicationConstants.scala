@@ -18,7 +18,7 @@ object ApplicationConstants
 
   //LOCATION AND FILE TYPE
   val INPUT_LOCATION_CLICKSTREAM:String="data/Input/clickstream/clickstream_log.csv"
-  val INPUT_LOCATION_ITEM:String="data/Input/item/item_data.csv"
+  val INPUT_LOCATION_ITEM:String="data/Input/item/item.csv"
   val INPUT_NULL_CLICKSTREAM_DATA:String="data/Output/Pipeline-failures/NullClickstreamData"
   val INPUT_NULL_ITEM_DATA:String="data/Output/Pipeline-failures/NullItemData"
   val FILE_TYPE:String="csv"
