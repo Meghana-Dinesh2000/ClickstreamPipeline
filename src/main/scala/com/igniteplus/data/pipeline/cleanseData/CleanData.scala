@@ -7,30 +7,30 @@ import org.apache.spark.sql.functions.{col, desc, row_number, trim, when}
 
 object CleanData
 {
-//  def removeNull (df : DataFrame, columnName : Seq[String], filePath : String, fileFormat : String) : DataFrame = {
-//    var nullDf : DataFrame = df
-//    var notNullDf : DataFrame = df
-//    for( i <- columnName)
-//    {
-//      nullDf = df.filter(df(i).isNull)
-//      notNullDf = df.filter(df(i).isNotNull)
-//    }
-//    if(nullDf.count() > 0)
-//      writeFile(nullDf, fileFormat, filePath)
-//    notNullDf
-//  }
-  /**Alternative for the previous function but not used as the execution time is more in this case*/
-  def checkForNull (df : DataFrame, columnNames : Seq[String], filePath : String, fileFormat : String) : DataFrame =
-  {
-    val changedColName : Seq[Column] = columnNames.map(x=>col(x))
-    val condition:Column=changedColName.map(x=>x.isNull).reduce(_ || _)
-    val dfChanged=df.withColumn("nullFlag",when(condition,"true").otherwise("false"))
-    val nullDf : DataFrame = dfChanged.filter("nullFlag==true")
-    val notNullDf : DataFrame = dfChanged.filter("nullFlag==false")
-    if(nullDf.count()>0)
+  def removeNull (df : DataFrame, columnName : Seq[String], filePath : String, fileFormat : String) : DataFrame = {
+    var nullDf : DataFrame = df
+    var notNullDf : DataFrame = df
+    for( i <- columnName)
+    {
+      nullDf = df.filter(df(i).isNull)
+      notNullDf = df.filter(df(i).isNotNull)
+    }
+   if(nullDf.count() > 0)
       writeFile(nullDf, fileFormat, filePath)
     notNullDf
   }
+  /**Alternative for the previous function but not used as the execution time is more in this case*/
+//  def checkForNull (df : DataFrame, columnNames : Seq[String], filePath : String, fileFormat : String) : DataFrame =
+//  {
+//    val changedColName : Seq[Column] = columnNames.map(x=>col(x))
+//    val condition:Column=changedColName.map(x=>x.isNull).reduce(_ || _)
+//    val dfChanged=df.withColumn("nullFlag",when(condition,"true").otherwise("false"))
+//    val nullDf : DataFrame = dfChanged.filter("nullFlag==true")
+//    val notNullDf : DataFrame = dfChanged.filter("nullFlag==false")
+//    if(nullDf.count()>0)
+//      writeFile(nullDf, fileFormat, filePath)
+//    notNullDf
+//  }
 
   /**Function to remove duplicates*/
   def deDuplication(df : DataFrame, orderByColumn : String, colNames : String*) : DataFrame =
