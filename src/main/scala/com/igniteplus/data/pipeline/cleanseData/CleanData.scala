@@ -7,10 +7,10 @@ import org.apache.spark.sql.functions.{col, desc, row_number, trim, when}
 
 object CleanData
 {
-  def removeNull (df : DataFrame, columnName : Seq[String], filePath : String, fileFormat : String) : DataFrame = {
+  def filterRemoveNull(df : DataFrame, primaryColumns : Seq[String], filePath : String, fileFormat : String) : DataFrame = {
     var nullDf : DataFrame = df
     var notNullDf : DataFrame = df
-    for( i <- columnName)
+    for( i <- primaryColumns)
     {
       nullDf = df.filter(df(i).isNull)
       notNullDf = df.filter(df(i).isNotNull)
