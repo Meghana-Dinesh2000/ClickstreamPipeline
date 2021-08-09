@@ -1,7 +1,6 @@
 package com.igniteplus.data.pipeline.service
 
 import com.igniteplus.data.pipeline.exception.FileWriterException
-import org.apache.hadoop.hdfs.protocol.proto.HdfsProtos.HdfsFileStatusProto.FileType
 import org.apache.spark.sql.DataFrame
 
 import java.io.FileWriter

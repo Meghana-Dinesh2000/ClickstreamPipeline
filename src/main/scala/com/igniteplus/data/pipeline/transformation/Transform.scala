@@ -1,6 +1,6 @@
 package com.igniteplus.data.pipeline.transformation
 
-import org.apache.spark.sql.{Column, DataFrame}
+import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.{col, initcap, unix_timestamp}
 
 object Transform
