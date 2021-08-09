@@ -28,7 +28,7 @@ object DataPipeline extends Logging
         case ex:Exception =>
           logError("Unkonwn Exception",ex)
       }
-    val duration = (System.nanoTime()-t1)/1000000000
+    val duration = (System.nanoTime()-t1)/1e9d
     println(duration)
   }
 }
