@@ -20,18 +20,4 @@ object FileWriterService
       case e: Exception => FileWriterException("Unable to write files to the location "+ s"$filePath")
     }
   }
-  def generalWrite(content : String, filePath:String) : Unit=
-    {
-      try
-        {
-          val fw = new FileWriter(filePath,true)
-          fw.write(content)
-          fw.write("\n")
-          fw.close()
-        }
-      catch
-        {
-          case e: Exception => FileWriterException("Unable to write wiles to the location" +s"$filePath")
-        }
-    }
 }

@@ -13,28 +13,28 @@ object PipelineService
   def pipelineService () : Unit  =
   {
     /** Reading Clickstream Data */
-    val clickstreamDf:DataFrame=readFile(INPUT_LOCATION_CLICKSTREAM,CSV_FILE_TYPE)
+    val clickstreamDf : DataFrame = readFile(INPUT_LOCATION_CLICKSTREAM,CSV_FILE_TYPE)
 
     /** Reading Item Data */
-    val itemDf:DataFrame=readFile(INPUT_LOCATION_ITEM,CSV_FILE_TYPE)
+    val itemDf : DataFrame = readFile(INPUT_LOCATION_ITEM,CSV_FILE_TYPE)
 
     /**Changing to appropriate datatype*/
-    val validatedClickstremDf:DataFrame=dataTypeValidation(clickstreamDf,COL_TIMESTAMP,TO_TIMESTAMP,TIMESTAMP_FORMAT)
+    val validatedClickstremDf : DataFrame = dataTypeValidation(clickstreamDf,COL_TIMESTAMP,TO_TIMESTAMP,TIMESTAMP_FORMAT)
 
     /**Checking for null vlaues and filtering them*/
-    val notNullClickstreamDf:DataFrame=filterRemoveNull(validatedClickstremDf,SEQ_CLICKSTREAM_PRIMARY_KEYS,INPUT_NULL_CLICKSTREAM_DATA,CSV_FILE_TYPE)
-    val notNullItemDf:DataFrame=filterRemoveNull(itemDf,SEQ_ITEM_PRIMARY_KEYS,INPUT_NULL_ITEM_DATA,CSV_FILE_TYPE)
+    val notNullClickstreamDf : DataFrame = filterRemoveNull(validatedClickstremDf,SEQ_CLICKSTREAM_PRIMARY_KEYS,INPUT_NULL_CLICKSTREAM_DATA,CSV_FILE_TYPE)
+    val notNullItemDf : DataFrame = filterRemoveNull(itemDf,SEQ_ITEM_PRIMARY_KEYS,INPUT_NULL_ITEM_DATA,CSV_FILE_TYPE)
 
     /**Removing duplicates from data*/
-    val deduplicatedClickstreamDf:DataFrame=deDuplication(notNullClickstreamDf,COL_TIMESTAMP,SEQ_CLICKSTREAM_PRIMARY_KEYS:_*)
-    val deduplicatedItemDf:DataFrame=deDuplication(notNullItemDf,NIL_VALUE,SEQ_ITEM_PRIMARY_KEYS:_*)
+    val deduplicatedClickstreamDf : DataFrame = deDuplication(notNullClickstreamDf,COL_TIMESTAMP,SEQ_CLICKSTREAM_PRIMARY_KEYS:_*)
+    val deduplicatedItemDf : DataFrame = deDuplication(notNullItemDf,NIL_VALUE,SEQ_ITEM_PRIMARY_KEYS:_*)
 
     /**Changing the names to appropriate form by naming them consistently*/
-    val consistentNameClickstreamDf:DataFrame=consistentNaming(deduplicatedClickstreamDf,REDIRECTION_SOURCE)
-    val consistentItemDf:DataFrame=consistentNaming(deduplicatedItemDf,DEPARTMENT_NAME)
+    val consistentNameClickstreamDf : DataFrame = consistentNaming(deduplicatedClickstreamDf,REDIRECTION_SOURCE)
+    val consistentItemDf : DataFrame = consistentNaming(deduplicatedItemDf,DEPARTMENT_NAME)
 
     /**Trimming the spaces present in column values*/
-    val trimmedClickstreamDf:DataFrame=removeSpaces(consistentNameClickstreamDf,REDIRECTION_SOURCE)
-    val trimmedItemDf:DataFrame=removeSpaces(consistentItemDf,DEPARTMENT_NAME)
+    val trimmedClickstreamDf : DataFrame = removeSpaces(consistentNameClickstreamDf,REDIRECTION_SOURCE)
+    val trimmedItemDf : DataFrame = removeSpaces(consistentItemDf,DEPARTMENT_NAME)
   }
 }

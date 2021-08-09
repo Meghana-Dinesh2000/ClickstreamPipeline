@@ -22,6 +22,8 @@ object ApplicationConstants
   /**Nil value*/
   val NIL_VALUE : String = "nil"
 
+  /**Exit code*/
+  val FAILURE_EXIT_CODE : Int = 1
 
   /**Input Column Names*/
   val EVENT_TIMESTAMP : String = "event_timestamp"
