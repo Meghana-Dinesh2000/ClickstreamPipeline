@@ -1,3 +1,0 @@
-com.igniteplus.data.pipeline.exception.FileReaderException: No files read from the location data/Input/clickstream/clickstream.csv
-com.igniteplus.data.pipeline.exception.FileReaderException: No files read from the location data/Input/item/item.csv
-com.igniteplus.data.pipeline.exception.FileReaderException: No files read from the location data/Input/item/item.csv
