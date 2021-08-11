@@ -7,6 +7,14 @@ import org.apache.spark.sql.functions.{col, desc, row_number, trim, when}
 
 object CleanData
 {
+  /**
+   * Function to remove and filter null values and write null values to separate file
+   * @param df the dataframe taken as an input
+   * @param primaryColumns sequence of primary key columns
+   * @param filePath the location where null values will be written
+   * @param fileFormat specifies format of the file
+   * @return notNullDf which is the data free from null values
+   */
   def filterRemoveNull(df : DataFrame, primaryColumns : Seq[String], filePath : String, fileFormat : String) : DataFrame = {
     var nullDf : DataFrame = df
     var notNullDf : DataFrame = df
@@ -20,8 +28,8 @@ object CleanData
     notNullDf
   }
   /**Alternative for the previous function but not used as the execution time is more in this case*/
-  def checkForNull (df : DataFrame, columnNames : Seq[String], filePath : String, fileFormat : String) : DataFrame =
-  {
+  def checkForNull (df : DataFrame, columnNames : Seq[String], filePath : String, fileFormat : String) : DataFrame = {
+
     val changedColName : Seq[Column] = columnNames.map(x=>col(x))
     val condition:Column=changedColName.map(x=>x.isNull).reduce(_ || _)
     val dfChanged=df.withColumn("nullFlag",when(condition,"true").otherwise("false"))
@@ -32,20 +40,30 @@ object CleanData
     notNullDf
   }
 
-  /**Function to remove duplicates*/
-  def deDuplication(df : DataFrame, orderByColumn : String, colNames : String*) : DataFrame =
+  /**
+   * Function to remove duplicate values
+   * @param df specifies the dataframe to be processed
+   * @param keyColumnNames specifies the primary key columns wrt the data
+   * @param arrangeColumnName specifies the orderBy if any
+   * @return dataframe free from duplicate values
+   */
+  def deDuplication(df : DataFrame, keyColumnNames : Seq[String], arrangeColumnName : Option[String] = None) : DataFrame =
   {
-    if (orderByColumn == "nil") {
-      val deDuplicate: DataFrame = df.dropDuplicates(colNames.head, colNames.tail: _*)
-      deDuplicate
-    }
-    else {
-      val winSpec = Window.partitionBy(colNames.head, colNames.tail: _*)
-        .orderBy(desc(orderByColumn))
-      val deDuplicate: DataFrame = df.withColumn("row_number", row_number().over(winSpec))
-        .filter("row_number==1")
-        .drop("row_number")
-      deDuplicate
+    arrangeColumnName match{
+      case Some(order) =>
+        {
+          val winSpec = Window.partitionBy(keyColumnNames.head, keyColumnNames.tail: _*)
+                  .orderBy(desc(order))
+          val deDuplicate: DataFrame = df.withColumn("row_number", row_number().over(winSpec))
+                  .filter("row_number==1")
+                  .drop("row_number")
+                deDuplicate
+        }
+      case None=>
+        {
+          val deDuplicate: DataFrame = df.dropDuplicates(keyColumnNames.head, keyColumnNames.tail: _*)
+          deDuplicate
+        }
     }
   }
 
