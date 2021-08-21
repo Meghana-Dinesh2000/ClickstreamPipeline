@@ -6,7 +6,7 @@ import com.igniteplus.data.pipeline.constants.ApplicationConstants._
 import com.igniteplus.data.pipeline.service.DbService.sqlWrite
 import com.igniteplus.data.pipeline.service.FileReaderService.readFile
 import com.igniteplus.data.pipeline.service.FileWriterService.writeFile
-import com.igniteplus.data.pipeline.transformation.Transform.innerJoin
+import com.igniteplus.data.pipeline.transformation.Transform.join
 import org.apache.spark.sql.DataFrame
 
 
@@ -48,7 +48,7 @@ object PipelineService
     val trimmedItemDf : DataFrame = removeSpaces(consistentItemDf,DEPARTMENT_NAME)
     println(trimmedClickstreamDf.count)
     println(trimmedItemDf.count)
-    val jointDf : DataFrame = innerJoin(trimmedClickstreamDf, trimmedItemDf)
+    val jointDf : DataFrame = join(trimmedClickstreamDf, trimmedItemDf)
     jointDf.explain()
     jointDf.show()
     println(jointDf.count())

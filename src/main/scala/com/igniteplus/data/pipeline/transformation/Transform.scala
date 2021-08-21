@@ -1,12 +1,11 @@
 package com.igniteplus.data.pipeline.transformation
 
+import com.igniteplus.data.pipeline.constants.ApplicationConstants.JOIN_KEY
 import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.functions.{broadcast, col, initcap, unix_timestamp}
-
 object Transform
 {
-    def innerJoin(df1 : DataFrame , df2 : DataFrame) : DataFrame = {
-      val resultDf : DataFrame = df1.join(df2 , df1("item_id")=== df2("item_id"), "leftouter")
+    def join(df1 : DataFrame, df2 : DataFrame) : DataFrame = {
+      val resultDf : DataFrame = df1.join(df2 ,df1(JOIN_KEY) === df2(JOIN_KEY) , "leftouter")
       resultDf
     }
 

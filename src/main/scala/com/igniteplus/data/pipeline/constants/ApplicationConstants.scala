@@ -52,4 +52,7 @@ object ApplicationConstants
   val KEY_PASSWORD : String = "meghana"
   val LOCATION_SQL_PASSWORD : String = "E:\\targetDEProduct_SQLPassword.txt"
   val LOCATION_ENCRYPTED_PASSWORD : String = "credentials/SQL_password_file"
+
+  /** Join CONDITION */
+  val JOIN_KEY : String = "item_id"
 }
