@@ -55,4 +55,5 @@ object ApplicationConstants
 
   /** Join CONDITION */
   val JOIN_KEY : String = "item_id"
+  val JOIN_TYPE : String = "leftouter"
 }
