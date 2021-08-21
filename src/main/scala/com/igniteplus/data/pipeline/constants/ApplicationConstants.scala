@@ -44,4 +44,12 @@ object ApplicationConstants
   /**Sequence of columns checked for null values*/
   val CLICKSTREAM_COLUMNS_CHECK_NULL : Seq[String] = Seq("event_timestamp", "device_type", "session_id", "visitor_id", "item_id", "redirection_source")
   val ITEM_COLUMNS_CHECK_NULL : Seq[String] = Seq("item_id", "item_price", "product_type", "department_name")
+
+  /** Write to SQL Database */
+  val JDBC_DRIVER : String = "com.mysql.cj.jdbc.Driver"
+  val USER_NAME : String = "root"
+  val SQL_URL : String = "jdbc:mysql://localhost:3306/ignite"
+  val KEY_PASSWORD : String = "meghana"
+  val LOCATION_SQL_PASSWORD : String = "E:\\targetDEProduct_SQLPassword.txt"
+  val LOCATION_ENCRYPTED_PASSWORD : String = "credentials/SQL_password_file"
 }

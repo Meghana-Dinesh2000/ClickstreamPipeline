@@ -3,8 +3,6 @@ package com.igniteplus.data.pipeline.service
 import com.igniteplus.data.pipeline.exception.FileWriterException
 import org.apache.spark.sql.DataFrame
 
-import java.io.FileWriter
-
 object FileWriterService
 {
   def writeFile(df:DataFrame, fileType:String, filePath:String) : Unit =

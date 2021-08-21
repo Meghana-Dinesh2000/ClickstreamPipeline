@@ -1,10 +1,12 @@
 package com.igniteplus.data.pipeline.service
 
 
-import com.igniteplus.data.pipeline.cleanseData.CleanData.{checkForNull, deDuplication, filterRemoveNull, removeSpaces}
-import com.igniteplus.data.pipeline.constants.ApplicationConstants.{CLICKSTREAM_COLUMNS_CHECK_NULL, COL_TIMESTAMP, CSV_FILE_TYPE, DEPARTMENT_NAME, EVENT_TIMESTAMP, INPUT_LOCATION_CLICKSTREAM, INPUT_LOCATION_ITEM, INPUT_NULL_CLICKSTREAM_DATA, INPUT_NULL_ITEM_DATA, ITEM_COLUMNS_CHECK_NULL, NIL_VALUE, REDIRECTION_SOURCE, SEQ_CLICKSTREAM_PRIMARY_KEYS, SEQ_ITEM_PRIMARY_KEYS, TIMESTAMP_FORMAT, TO_TIMESTAMP, spark}
+import com.igniteplus.data.pipeline.cleanseData.CleanData._
+import com.igniteplus.data.pipeline.constants.ApplicationConstants._
+import com.igniteplus.data.pipeline.service.DbService.sqlWrite
 import com.igniteplus.data.pipeline.service.FileReaderService.readFile
-import com.igniteplus.data.pipeline.transformation.Transform.{consistentNaming, dataTypeValidation}
+import com.igniteplus.data.pipeline.service.FileWriterService.writeFile
+import com.igniteplus.data.pipeline.transformation.Transform.innerJoin
 import org.apache.spark.sql.DataFrame
 
 
@@ -24,12 +26,16 @@ object PipelineService
     /**Checking for null vlaues and filtering them*/
     val notNullClickstreamDf : DataFrame = filterRemoveNull(validatedClickstremDf,SEQ_CLICKSTREAM_PRIMARY_KEYS,INPUT_NULL_CLICKSTREAM_DATA,CSV_FILE_TYPE)
     val notNullItemDf : DataFrame = filterRemoveNull(itemDf,SEQ_ITEM_PRIMARY_KEYS,INPUT_NULL_ITEM_DATA,CSV_FILE_TYPE)
-
+    sqlWrite(notNullItemDf,"ITEM_DATA");
+    sqlWrite(notNullClickstreamDf,"CLICKSTREAM_DATA");
 //    println("Number of clickstream data rows before deduplication="+notNullClickstreamDf.count())
 //    println("Number of item data rows before deduplication="+notNullItemDf.count())
     /**Removing duplicates from data*/
     val deduplicatedClickstreamDf : DataFrame = deDuplication(notNullClickstreamDf,SEQ_CLICKSTREAM_PRIMARY_KEYS)
     val deduplicatedItemDf : DataFrame = deDuplication(notNullItemDf,SEQ_ITEM_PRIMARY_KEYS)
+//    writeFile(deduplicatedClickstreamDf,CSV_FILE_TYPE,"data/Output/DeduplicatedClickstreamData")
+//    writeFile(deduplicatedItemDf,CSV_FILE_TYPE,"data/Output/DeduplicatedItemData")
+
 
 //    println("Number of clickstream data rows after deduplication="+deduplicatedClickstreamDf.count())
 //    println("Number of item data rows after deduplication="+deduplicatedItemDf.count())
@@ -40,5 +46,11 @@ object PipelineService
     /**Trimming the spaces present in column values*/
     val trimmedClickstreamDf : DataFrame = removeSpaces(consistentNameClickstreamDf,REDIRECTION_SOURCE)
     val trimmedItemDf : DataFrame = removeSpaces(consistentItemDf,DEPARTMENT_NAME)
+    println(trimmedClickstreamDf.count)
+    println(trimmedItemDf.count)
+    val jointDf : DataFrame = innerJoin(trimmedClickstreamDf, trimmedItemDf)
+    jointDf.explain()
+    jointDf.show()
+    println(jointDf.count())
   }
 }

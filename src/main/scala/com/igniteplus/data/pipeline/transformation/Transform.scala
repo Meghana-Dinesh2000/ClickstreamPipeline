@@ -1,31 +1,15 @@
 package com.igniteplus.data.pipeline.transformation
 
 import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.functions.{col, initcap, unix_timestamp}
+import org.apache.spark.sql.functions.{broadcast, col, initcap, unix_timestamp}
 
 object Transform
 {
-  def dataTypeValidation(df : DataFrame, colName : String, to_datatype : String, format : String) : DataFrame =
-  {
-    if(format == "nil")
-    {
-        val dataValidated : DataFrame = df.withColumn(colName, df.col(colName).cast(to_datatype))
-        dataValidated
+    def innerJoin(df1 : DataFrame , df2 : DataFrame) : DataFrame = {
+      val resultDf : DataFrame = df1.join(df2 , df1("item_id")=== df2("item_id"), "leftouter")
+      resultDf
     }
-    else
-    {
-      val dataValidated : DataFrame = df
-          .withColumn(colName, unix_timestamp(col(colName), format)
-          .cast("double")
-          .cast(to_datatype))
-      dataValidated
-    }
-  }
-  def consistentNaming(df : DataFrame, nameCol : String): DataFrame =
-  {
-    val consistentNames : DataFrame = df.withColumn(nameCol,initcap(col(nameCol)))
-    //consistentNames.show()
-    consistentNames
-  }
+
+
 
 }

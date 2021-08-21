@@ -3,7 +3,7 @@ package com.igniteplus.data.pipeline.cleanseData
 import com.igniteplus.data.pipeline.service.FileWriterService.writeFile
 import org.apache.spark.sql.expressions.Window
 import org.apache.spark.sql.{Column, DataFrame}
-import org.apache.spark.sql.functions.{col, desc, row_number, trim, when}
+import org.apache.spark.sql.functions.{col, desc, initcap, row_number, trim, unix_timestamp, when}
 
 object CleanData
 {
@@ -57,7 +57,7 @@ object CleanData
           val deDuplicate: DataFrame = df.withColumn("row_number", row_number().over(winSpec))
                   .filter("row_number==1")
                   .drop("row_number")
-                deDuplicate
+          deDuplicate
         }
       case None=>
         {
@@ -78,6 +78,28 @@ object CleanData
     // .withColumn("length_with_triming", functions.length(col(colName)))
     //    trimmedDf.show()
     trimmedDf
+  }
+  def consistentNaming(df : DataFrame, nameCol : String): DataFrame =
+  {
+    val consistentNames : DataFrame = df.withColumn(nameCol,initcap(col(nameCol)))
+    //consistentNames.show()
+    consistentNames
+  }
+  def dataTypeValidation(df : DataFrame, colName : String, to_datatype : String, format : String) : DataFrame =
+  {
+    if(format == "nil")
+    {
+      val dataValidated : DataFrame = df.withColumn(colName, df.col(colName).cast(to_datatype))
+      dataValidated
+    }
+    else
+    {
+      val dataValidated : DataFrame = df
+        .withColumn(colName, unix_timestamp(col(colName), format)
+          .cast("double")
+          .cast(to_datatype))
+      dataValidated
+    }
   }
 }
 
