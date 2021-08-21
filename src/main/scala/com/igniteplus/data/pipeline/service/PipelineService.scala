@@ -35,8 +35,8 @@ object PipelineService
     val deduplicatedItemDf : DataFrame = deDuplication(notNullItemDf,SEQ_ITEM_PRIMARY_KEYS)
 //    writeFile(deduplicatedClickstreamDf,CSV_FILE_TYPE,"data/Output/DeduplicatedClickstreamData")
 //    writeFile(deduplicatedItemDf,CSV_FILE_TYPE,"data/Output/DeduplicatedItemData")
-
-
+//
+//
 //    println("Number of clickstream data rows after deduplication="+deduplicatedClickstreamDf.count())
 //    println("Number of item data rows after deduplication="+deduplicatedItemDf.count())
     /**Changing the names to appropriate form by naming them consistently*/
@@ -49,7 +49,7 @@ object PipelineService
     println(trimmedClickstreamDf.count)
     println(trimmedItemDf.count)
     val jointDf : DataFrame = join(trimmedClickstreamDf, trimmedItemDf)
-    jointDf.explain()
+//    jointDf.explain()
     jointDf.show()
     println(jointDf.count())
   }

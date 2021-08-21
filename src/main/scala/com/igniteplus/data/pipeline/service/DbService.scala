@@ -10,32 +10,32 @@ import javax.crypto.spec.SecretKeySpec
 
 object DbService
 {
-  def encryptUsingAESKey(data: String, key: Array[Byte]) : Unit =
-    {
-      val secKey:SecretKeySpec=new SecretKeySpec(key,"AES")
-      val cipher : Cipher = Cipher.getInstance("AES")
-      cipher.init(Cipher.ENCRYPT_MODE,secKey)
-      val newBytes:Array[Byte]=cipher.doFinal(data.getBytes())
-      val base64EncodedEncryptedMsg = BaseEncoding.base64.encode(newBytes)
-      scala.tools.nsc.io.File(LOCATION_ENCRYPTED_PASSWORD).writeAll(base64EncodedEncryptedMsg)
-    }
+//  def encryptUsingAESKey(data: String, key: Array[Byte]) : Unit =
+//    {
+//      val secKey:SecretKeySpec=new SecretKeySpec(key,CRYPTOGRAPHY_ALGORITHM)
+//      val cipher : Cipher = Cipher.getInstance(CRYPTOGRAPHY_ALGORITHM)
+//      cipher.init(Cipher.ENCRYPT_MODE,secKey)
+//      val newBytes:Array[Byte]=cipher.doFinal(data.getBytes())
+//      val base64EncodedEncryptedMsg = BaseEncoding.base64.encode(newBytes)
+//      scala.tools.nsc.io.File(LOCATION_ENCRYPTED_PASSWORD).writeAll(base64EncodedEncryptedMsg)
+//    }
 
   def decryptUsingAESKey(encryptedData: String, key: Array[Byte]) : String = {
-    val secKey : SecretKeySpec = new SecretKeySpec(key,"AES")
-    val cipher : Cipher = Cipher.getInstance("AES")
+    val secKey : SecretKeySpec = new SecretKeySpec(key,CRYPTOGRAPHY_ALGORITHM)
+    val cipher : Cipher = Cipher.getInstance(CRYPTOGRAPHY_ALGORITHM)
     cipher.init(Cipher.DECRYPT_MODE,secKey)
     val newData : Array[Byte] =cipher.doFinal(BaseEncoding.base64().decode(encryptedData))
     val message : String = new String(newData)
     message
   }
   def securityEncryptionDecryption(): String = {
-    val keyStore : KeyStore = KeyStore.getInstance("JCEKS");
-    val stream : FileInputStream = new FileInputStream("mykeystore.jks")
-    keyStore.load(stream,KEY_PASSWORD.toCharArray)
-    val key : Key = keyStore.getKey("mykey",KEY_PASSWORD.toCharArray)
-    val source = scala.io.Source.fromFile(LOCATION_SQL_PASSWORD)
-    val data : String = source.mkString
-    encryptUsingAESKey(data,key.getEncoded)
+   val keyStore : KeyStore = KeyStore.getInstance(KEY_TYPE);
+    val stream : FileInputStream = new FileInputStream(KEY_LOCATION)
+ keyStore.load(stream,KEY_PASSWORD.toCharArray)
+  val key : Key = keyStore.getKey(KEY_ALIAS,KEY_PASSWORD.toCharArray)
+//    val source = scala.io.Source.fromFile(LOCATION_SQL_PASSWORD)
+//    val data : String = source.mkString
+//    encryptUsingAESKey(data,key.getEncoded)
     val encryptedData : String = scala.io.Source.fromFile(LOCATION_ENCRYPTED_PASSWORD).mkString
     val decryptedData = decryptUsingAESKey(encryptedData,key.getEncoded)
     decryptedData

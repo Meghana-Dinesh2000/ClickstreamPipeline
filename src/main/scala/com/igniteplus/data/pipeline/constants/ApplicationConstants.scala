@@ -52,8 +52,14 @@ object ApplicationConstants
   val KEY_PASSWORD : String = "meghana"
   val LOCATION_SQL_PASSWORD : String = "E:\\targetDEProduct_SQLPassword.txt"
   val LOCATION_ENCRYPTED_PASSWORD : String = "credentials/SQL_password_file"
+  val TABLE_CLICKSTREAM_DATA : String = "CLICKSTREAM_DATA"
+  val TABLE_ITEM_DATA : String = "ITEM_DATA"
+  val KEY_TYPE : String = "JCEKS"
+  val KEY_LOCATION : String = "credentials/mykeystore.jks"
+  val CRYPTOGRAPHY_ALGORITHM : String = "AES"
+  val KEY_ALIAS : String = "mykey"
 
   /** Join CONDITION */
   val JOIN_KEY : String = "item_id"
-  val JOIN_TYPE : String = "leftouter"
+  val JOIN_TYPE : String = "left"
 }
