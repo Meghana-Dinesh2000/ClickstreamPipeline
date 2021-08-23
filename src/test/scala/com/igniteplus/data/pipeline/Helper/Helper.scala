@@ -6,7 +6,7 @@ import com.igniteplus.data.pipeline.util.ApplicationUtil.createSparkSession
 trait Helper {
 
   implicit val spark = createSparkSession(SPARK_CONF)
-  import spark.implicits._
+
 
   /* Helpers for File Reader Service Test Case */
   val READ_LOCATION : String = "data/Test_Inputs/FileReaderServiceTestCaseInput.csv"
