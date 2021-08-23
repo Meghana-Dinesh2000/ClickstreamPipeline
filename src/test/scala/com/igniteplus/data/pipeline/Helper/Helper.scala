@@ -6,6 +6,7 @@ import com.igniteplus.data.pipeline.util.ApplicationUtil.createSparkSession
 trait Helper {
 
   implicit val spark = createSparkSession(SPARK_CONF)
+  import spark.implicits._
 
   /* Helpers for File Reader Service Test Case */
   val READ_LOCATION : String = "data/Test_Inputs/FileReaderServiceTestCaseInput.csv"
@@ -24,7 +25,13 @@ trait Helper {
   val ORDER_BY_COLUMN : String = "event_timestamp"
 
   /* Helpers for join Test Case*/
-  val  INPUT_JOIN_CLICKSTREAM : String = "data/Test_Inputs/JoinClickstreamTestCaseInput.csv"
-  val  INPUT_JOIN_ITEM : String = "data/Test_Inputs/JoinItemTestCaseInput.csv"
+  val JOIN_KEY : String = "item_id"
+  val JOIN_TYPE : String = "left"
+
+  /* Helpers for Change Data type test case */
+  val CHANGE_DATATYPE_TEST_READ : String = "data/Test_Inputs/ChangeDataTypeTestCaseInput.csv"
+  val EVENT_TIMESTAMP:String = "timestamp"
+  val COLUMNS_VALID_DATATYPE_CLICKSTREAM : String = "event_timestamp"
+  val NEW_DATATYPE_CLICKSTREAM : String = "timestamp"
 
 }

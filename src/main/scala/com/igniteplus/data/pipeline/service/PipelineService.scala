@@ -23,6 +23,7 @@ object PipelineService
     /**Changing to appropriate datatype*/
     val validatedClickstremDf : DataFrame = dataTypeValidation(clickstreamDf,COL_TIMESTAMP,TO_TIMESTAMP,TIMESTAMP_FORMAT)
 
+
     /**Checking for null vlaues and filtering them*/
     val notNullClickstreamDf : DataFrame = filterRemoveNull(validatedClickstremDf,SEQ_CLICKSTREAM_PRIMARY_KEYS,INPUT_NULL_CLICKSTREAM_DATA,CSV_FILE_TYPE)
     val notNullItemDf : DataFrame = filterRemoveNull(itemDf,SEQ_ITEM_PRIMARY_KEYS,INPUT_NULL_ITEM_DATA,CSV_FILE_TYPE)
@@ -48,7 +49,7 @@ object PipelineService
     val trimmedItemDf : DataFrame = removeSpaces(consistentItemDf,DEPARTMENT_NAME)
     println(trimmedClickstreamDf.count)
     println(trimmedItemDf.count)
-    val jointDf : DataFrame = join(trimmedClickstreamDf, trimmedItemDf)
+    val jointDf : DataFrame = join(trimmedClickstreamDf, trimmedItemDf,JOIN_KEY,JOIN_TYPE)
 //    jointDf.explain()
     jointDf.show()
     println(jointDf.count())

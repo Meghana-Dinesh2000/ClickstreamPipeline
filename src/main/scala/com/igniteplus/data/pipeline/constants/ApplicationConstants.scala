@@ -7,9 +7,9 @@ import org.apache.spark.sql.SparkSession
 object ApplicationConstants
 {
   /**Variables for Spark Session*/
-  val SPARK_CONF_FILE_NAME = "spark.conf"
-  val SPARK_CONF: SparkConf = getSparkConf(SPARK_CONF_FILE_NAME)
-  implicit val spark: SparkSession = createSparkSession(SPARK_CONF)
+  val SPARK_CONF_FILE_NAME : String = "spark.conf"
+  val SPARK_CONF : SparkConf = getSparkConf(SPARK_CONF_FILE_NAME)
+  implicit val spark : SparkSession = createSparkSession(SPARK_CONF)
 
   /**Location of various files*/
   val INPUT_LOCATION_CLICKSTREAM : String = "data/Input/clickstream/clickstream_log.csv"
@@ -62,5 +62,5 @@ object ApplicationConstants
 
   /** Join CONDITION */
   val JOIN_KEY : String = "item_id"
-  val JOIN_TYPE : String = "left"
+  val JOIN_TYPE : String = "leftouter"
 }
