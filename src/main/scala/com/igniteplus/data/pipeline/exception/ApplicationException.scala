@@ -6,3 +6,6 @@ class ApplicationException (message :String, cause:Throwable)extends Exception(m
 }
 case class FileReaderException(message: String) extends  ApplicationException(message)
 case class FileWriterException(message: String) extends  ApplicationException(message)
+
+case class DqDuplicateCheckException(message: String) extends ApplicationException(message)
+case class DqNullCheckException(message: String) extends ApplicationException(message)

@@ -32,10 +32,11 @@ object ApplicationConstants
   val DEPARTMENT_NAME : String = "department_name"
   val SESSION_ID : String = "session_id"
   val ITEM_ID : String = "item_id"
+  val VISITOR_ID : String = "visitor_id"
 
   /** Clickstream Datatype Validation */
   val COL_TIMESTAMP : String = EVENT_TIMESTAMP
-  val TO_TIMESTAMP : String = "timestamp"
+  val   TO_TIMESTAMP : String = "timestamp"
   val TIMESTAMP_FORMAT : String = "MM/dd/yyyy H:mm"
 
   /** Sequence of primary keys used for deduplication */
@@ -63,4 +64,14 @@ object ApplicationConstants
   /** Join CONDITION */
   val JOIN_KEY : String = "item_id"
   val JOIN_TYPE : String = "leftouter"
+
+  /** DQ Checks */
+  val ROW_NUMBER : String = "row_number"
+  val ROW_CONDITION : String = "row_number==1"
+
+
+  val SQL_URL_STAGING : String = "jdbc:mysql://localhost:3306/ignite_staging"
+  val SQL_URL_PROD : String = "jdbc:mysql://localhost:3306/ignite_prod"
+  val TABLE_NAME :String ="final_data"
+  val COLUMNS_CHECK_NULL_DQ_CHECK: Seq[String] = Seq(ApplicationConstants.SESSION_ID, ApplicationConstants.ITEM_ID,ApplicationConstants.VISITOR_ID)
 }

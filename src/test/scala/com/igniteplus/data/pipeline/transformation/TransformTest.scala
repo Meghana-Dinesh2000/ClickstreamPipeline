@@ -34,9 +34,11 @@ class TransformTest extends AnyFlatSpec with Helper{
 
     val resultDf : DataFrame = expectedDf.except(jointDf)
 
-    val actual : Boolean = resultDf.head(1).isEmpty
+    val actual : Long = resultDf.count()
+    val expected : Long = 0
+    //val actual : Boolean = resultDf.head(1).isEmpty
 
-    assertResult(true)(actual)
+    assertResult(expected)(actual)
   }
 }
 

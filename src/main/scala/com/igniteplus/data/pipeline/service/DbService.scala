@@ -2,9 +2,11 @@ package com.igniteplus.data.pipeline.service
 
 import com.google.common.io.BaseEncoding
 import com.igniteplus.data.pipeline.constants.ApplicationConstants._
-import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.{DataFrame, SparkSession}
+
 import java.io.FileInputStream
 import java.security.{Key, KeyStore}
+import java.util.Properties
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 
@@ -41,7 +43,15 @@ object DbService
     decryptedData
   }
 
-  def sqlWrite(df : DataFrame, tableName : String) : Unit = {
+  def sqlRead( tableName : String, url:String) : DataFrame = {
+    val prop:Properties = new java.util.Properties
+    prop.setProperty("driver", JDBC_DRIVER)
+    prop.setProperty("user", USER_NAME)
+    prop.setProperty("password", securityEncryptionDecryption())
+    spark.read.jdbc(url, tableName, prop)
+  }
+
+  def sqlWrite(df : DataFrame, tableName : String, url : String ) : Unit = {
         /**Method -1*/
 //    val url = SQL_URL
 //    df.write.format("jdbc")
@@ -56,7 +66,7 @@ object DbService
     prop.setProperty("driver", JDBC_DRIVER)
     prop.setProperty("user", USER_NAME)
     prop.setProperty("password", securityEncryptionDecryption())
-    val url = SQL_URL
+    //val url = SQL_URL
     df.write.mode("overwrite").jdbc(url, tableName, prop)
   }
 }

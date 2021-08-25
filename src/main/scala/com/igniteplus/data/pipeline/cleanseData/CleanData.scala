@@ -34,7 +34,7 @@ object CleanData
     val condition:Column=changedColName.map(x=>x.isNull).reduce(_ || _)
     val dfChanged=df.withColumn("nullFlag",when(condition,"true").otherwise("false"))
     val nullDf : DataFrame = dfChanged.filter("nullFlag==true")
-    val notNullDf : DataFrame = dfChanged.filter("nullFlag==false")
+    val notNullDf : DataFrame = dfChanged.filter("nullFlag==false").drop("nullFlag")
     if(nullDf.count()>0)
       writeFile(nullDf, fileFormat, filePath)
     notNullDf
