@@ -23,7 +23,9 @@ object CleanData
       nullDf = df.filter(df(i).isNull)
       notNullDf = df.filter(df(i).isNotNull)
     }
-   if(nullDf.count() > 0)
+    nullDf.count()
+
+    if(nullDf.count() > 0)
       writeFile(nullDf, fileFormat, filePath)
     notNullDf
   }
@@ -57,6 +59,7 @@ object CleanData
           val deDuplicate: DataFrame = df.withColumn("row_number", row_number().over(winSpec))
                   .filter("row_number==1")
                   .drop("row_number")
+
           deDuplicate
         }
       case None=>

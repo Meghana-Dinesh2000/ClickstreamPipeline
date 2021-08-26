@@ -22,6 +22,8 @@ object DqCheckService {
     /*********************************** WRITING TO PROD TABLE IN MYSQL***********************************************************************/
     if(dfCheckNull && dfCheckDuplicate){
       sqlWrite(dfReadStaged,TABLE_NAME,SQL_URL_PROD)
+//      println("Writing to production table")
+      scala.io.StdIn.readLine()
     }
   }
 
