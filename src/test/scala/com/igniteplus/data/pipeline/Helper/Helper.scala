@@ -29,9 +29,13 @@ trait Helper {
   val JOIN_TYPE : String = "left"
 
   /* Helpers for Change Data type test case */
-  val CHANGE_DATATYPE_TEST_READ : String = "data/Test_Inputs/ChangeDataTypeTestCaseInput.csv"
+  val CHANGE_DATATYPE_TEST_READ : String = "data/Test_Inputs/DatatypeValidationTestCaseInputRead.csv"
   val EVENT_TIMESTAMP:String = "timestamp"
   val COLUMNS_VALID_DATATYPE_CLICKSTREAM : String = "event_timestamp"
   val NEW_DATATYPE_CLICKSTREAM : String = "timestamp"
+  val TIMESTAMP_FORMAT : String = "MM/dd/yyyy H:mm"
 
+  /** Helpers for DQ Checks Method */
+  val PRIMARY_KEY_COLUMNS : Seq[String] = Seq("session_id","item_id")
+  val ORDER_BY_COL : String = "event_timestamp"
 }

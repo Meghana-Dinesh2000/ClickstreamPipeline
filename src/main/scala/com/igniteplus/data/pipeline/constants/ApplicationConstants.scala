@@ -25,6 +25,7 @@ object ApplicationConstants
 
   /**Exit code*/
   val FAILURE_EXIT_CODE : Int = 1
+  val SUCCESS_EXIT_CODE : Int = 0
 
   /**Input Column Names*/
   val EVENT_TIMESTAMP : String = "event_timestamp"

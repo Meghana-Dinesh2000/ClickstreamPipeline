@@ -3,7 +3,6 @@ package com.igniteplus.data.pipeline.service
 import com.google.common.io.BaseEncoding
 import com.igniteplus.data.pipeline.constants.ApplicationConstants._
 import org.apache.spark.sql.{DataFrame, SparkSession}
-
 import java.io.FileInputStream
 import java.security.{Key, KeyStore}
 import java.util.Properties
@@ -12,15 +11,16 @@ import javax.crypto.spec.SecretKeySpec
 
 object DbService
 {
-//  def encryptUsingAESKey(data: String, key: Array[Byte]) : Unit =
-//    {
-//      val secKey:SecretKeySpec=new SecretKeySpec(key,CRYPTOGRAPHY_ALGORITHM)
-//      val cipher : Cipher = Cipher.getInstance(CRYPTOGRAPHY_ALGORITHM)
-//      cipher.init(Cipher.ENCRYPT_MODE,secKey)
-//      val newBytes:Array[Byte]=cipher.doFinal(data.getBytes())
-//      val base64EncodedEncryptedMsg = BaseEncoding.base64.encode(newBytes)
-//      scala.tools.nsc.io.File(LOCATION_ENCRYPTED_PASSWORD).writeAll(base64EncodedEncryptedMsg)
-//    }
+  def encryptUsingAESKey(data: String, key: Array[Byte]) : Unit =
+    {
+      val secKey:SecretKeySpec=new SecretKeySpec(key,CRYPTOGRAPHY_ALGORITHM)
+      val cipher : Cipher = Cipher.getInstance(CRYPTOGRAPHY_ALGORITHM)
+      cipher.init(Cipher.ENCRYPT_MODE,secKey)
+      val newBytes:Array[Byte]=cipher.doFinal(data.getBytes)
+//      val test:String=newBytes.mkString
+      val base64EncodedEncryptedMsg = BaseEncoding.base64.encode(newBytes)
+      scala.tools.nsc.io.File(LOCATION_ENCRYPTED_PASSWORD).writeAll(base64EncodedEncryptedMsg)
+    }
 
   def decryptUsingAESKey(encryptedData: String, key: Array[Byte]) : String = {
     val secKey : SecretKeySpec = new SecretKeySpec(key,CRYPTOGRAPHY_ALGORITHM)
@@ -33,7 +33,7 @@ object DbService
   def securityEncryptionDecryption(): String = {
    val keyStore : KeyStore = KeyStore.getInstance(KEY_TYPE);
     val stream : FileInputStream = new FileInputStream(KEY_LOCATION)
- keyStore.load(stream,KEY_PASSWORD.toCharArray)
+  keyStore.load(stream,KEY_PASSWORD.toCharArray)
   val key : Key = keyStore.getKey(KEY_ALIAS,KEY_PASSWORD.toCharArray)
 //    val source = scala.io.Source.fromFile(LOCATION_SQL_PASSWORD)
 //    val data : String = source.mkString
