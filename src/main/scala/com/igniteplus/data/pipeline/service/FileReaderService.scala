@@ -1,22 +1,27 @@
 package com.igniteplus.data.pipeline.service
 
 import com.igniteplus.data.pipeline.exception.FileReaderException
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.{AnalysisException, DataFrame, SparkSession}
 object FileReaderService
 {
+
   /**Reading the  data*/
-   @throws def readFile(filePath : String, fileType : String)(implicit spark : SparkSession) : DataFrame = {
+    @throws(classOf[FileReaderException])
+     def readFile(filePath : String, fileType : String)(implicit spark : SparkSession): DataFrame  = {
+
      val fileDf: DataFrame = try {
        spark.read
          .option("header", "true")
-         .option("inferSchema", "true")
+         .option("delimiter",",")
          .format(fileType)
          .load(filePath)
+
      }
      catch {
-       case e: Exception => FileReaderException("Unable to read the files in given location "+ s"$filePath")
-         spark.emptyDataFrame
+       case e: Exception =>
+         throw FileReaderException("Exception in file reading")
      }
+
     val fileDfCount: Long = fileDf.count()
      if(fileDfCount == 0)
        throw FileReaderException("No files read from the location "+ s"$filePath")

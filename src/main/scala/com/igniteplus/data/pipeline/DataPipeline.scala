@@ -3,6 +3,7 @@ package com.igniteplus.data.pipeline
 import com.igniteplus.data.pipeline.constants.ApplicationConstants
 import com.igniteplus.data.pipeline.constants.ApplicationConstants.{FAILURE_EXIT_CODE, spark}
 import com.igniteplus.data.pipeline.exception.{DqDuplicateCheckException, DqNullCheckException, FileReaderException, FileWriterException}
+import com.igniteplus.data.pipeline.service.DqCheckService
 import com.igniteplus.data.pipeline.service.DqCheckService.executeDqCheck
 import com.igniteplus.data.pipeline.service.PipelineService.pipelineService
 import org.apache.spark.internal.Logging
@@ -18,8 +19,8 @@ object DataPipeline extends Logging
 
     try {
       pipelineService()
-      executeDqCheck()
-       exitCode = ApplicationConstants.SUCCESS_EXIT_CODE
+      DqCheckService.executeDqCheck()
+      exitCode = ApplicationConstants.SUCCESS_EXIT_CODE
     }
     catch
       {

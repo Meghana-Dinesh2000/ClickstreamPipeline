@@ -71,23 +71,49 @@ object CleanData
   }
 
 
-  /**Function used to trim the given column values*/
+  /**
+   * Function to trim the datasets
+   * @param df is the dataframe to be trimmed
+   * @param colName specifies which column should be trimmed
+   * @return the dataframe which is trimmed
+   */
 
-  def removeSpaces (df : DataFrame, colName : String) : DataFrame =
-  {
+  def removeSpaces (df : DataFrame, colName : String) : DataFrame = {
+
     val trimmedDf: DataFrame = df
       // .withColumn("length_without_trimming", functions.length(col(colName)))
       .withColumn(colName, trim(col(colName)))
     // .withColumn("length_with_triming", functions.length(col(colName)))
     //    trimmedDf.show()
     trimmedDf
+
   }
-  def consistentNaming(df : DataFrame, nameCol : String): DataFrame =
-  {
+
+  /**
+   * Function to name the datasets consistently
+   * @param df the dataframe to be named consistently
+   * @param nameCol column wished to be named consistently
+   * @return the dataframe after consistent naming
+   */
+
+  def consistentNaming(df : DataFrame, nameCol : String): DataFrame = {
+
     val consistentNames : DataFrame = df.withColumn(nameCol,initcap(col(nameCol)))
     //consistentNames.show()
     consistentNames
+
+
   }
+
+  /**
+   * Function to change to the required datatype
+   * @param df the dataframe in which datatype should be changed
+   * @param colName the column where the datatype needs to be changed
+   * @param to_datatype specifies the datatype to which it must be changed to
+   * @param format identifies the dataset to be modified
+   * @return the modified dataframe
+   */
+
   def dataTypeValidation(df : DataFrame, colName : String, to_datatype : String, format : String) : DataFrame =
   {
     if(format == "nil")
@@ -99,7 +125,6 @@ object CleanData
     {
       val dataValidated : DataFrame = df
         .withColumn(colName, unix_timestamp(col(colName), format)
-          .cast("double")
           .cast(to_datatype))
       dataValidated
     }

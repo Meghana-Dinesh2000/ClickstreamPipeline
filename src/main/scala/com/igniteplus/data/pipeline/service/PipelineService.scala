@@ -5,6 +5,7 @@ import com.igniteplus.data.pipeline.cleanseData.CleanData._
 import com.igniteplus.data.pipeline.constants.ApplicationConstants._
 import com.igniteplus.data.pipeline.service.DbService.sqlWrite
 import com.igniteplus.data.pipeline.service.FileReaderService.readFile
+import com.igniteplus.data.pipeline.service.FileWriterService.writeFile
 import com.igniteplus.data.pipeline.transformation.Transform.join
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.internal.Logging
@@ -14,6 +15,9 @@ object PipelineService extends Logging
 {
   def pipelineService () : Unit  =
   {
+    val t11 = System.nanoTime()
+
+
     /************************************************* Reading Clickstream Data *****************************************/
 
     val clickstreamDf : DataFrame = readFile(INPUT_LOCATION_CLICKSTREAM,CSV_FILE_TYPE)
@@ -35,8 +39,8 @@ object PipelineService extends Logging
 //  println("Performing Datatype Validation")
 //  validatedClickstreamDf.printSchema()
 //  scala.io.StdIn.readLine()
-
-    /*********************************Trimming the spaces present in column values***************************************/
+//
+   /*********************************Trimming the spaces present in column values***************************************/
 
     val trimmedClickstreamDf : DataFrame = removeSpaces(validatedClickstreamDf,REDIRECTION_SOURCE)
     val trimmedItemDf : DataFrame = removeSpaces(itemDf,DEPARTMENT_NAME)
@@ -47,7 +51,7 @@ object PipelineService extends Logging
 //    scala.io.StdIn.readLine()
 
 
-    /*********************************Checking for null vlaues and filtering them****************************************/
+   /*********************************Checking for null vlaues and filtering them****************************************/
     val notNullClickstreamDf : DataFrame = checkForNull(trimmedClickstreamDf,SEQ_CLICKSTREAM_PRIMARY_KEYS,INPUT_NULL_CLICKSTREAM_DATA,CSV_FILE_TYPE)
     val notNullItemDf : DataFrame = checkForNull(trimmedItemDf,SEQ_ITEM_PRIMARY_KEYS,INPUT_NULL_ITEM_DATA,CSV_FILE_TYPE)
     logInfo("Filtering and removing null records from data complete.")
@@ -58,7 +62,7 @@ object PipelineService extends Logging
 //    sqlWrite(notNullClickstreamDf,"CLICKSTREAM_DATA");
 //    println("Number of clickstream data rows before deduplication="+notNullClickstreamDf.count())
 //    println("Number of item data rows before deduplication="+notNullItemDf.count())
-
+//
     /*************************************Removing duplicates from data***************************************************/
     val deduplicatedClickstreamDf : DataFrame = deDuplication(notNullClickstreamDf,SEQ_CLICKSTREAM_PRIMARY_KEYS,Some(EVENT_TIMESTAMP))
     val deduplicatedItemDf : DataFrame = deDuplication(notNullItemDf,SEQ_ITEM_PRIMARY_KEYS)
@@ -66,7 +70,7 @@ object PipelineService extends Logging
 //    deduplicatedClickstreamDf.show()
 //    deduplicatedItemDf.show()
 //    println("Removal of duplicates")
-    //    scala.io.StdIn.readLine()
+//        scala.io.StdIn.readLine()
 //    writeFile(deduplicatedClickstreamDf,CSV_FILE_TYPE,"data/Output/DeduplicatedClickstreamData")
 //    writeFile(deduplicatedItemDf,CSV_FILE_TYPE,"data/Output/DeduplicatedItemData")
 //    println("Number of clickstream data rows after deduplication="+deduplicatedClickstreamDf.count())
@@ -77,6 +81,7 @@ object PipelineService extends Logging
     val consistentNameClickstreamDf : DataFrame = consistentNaming(deduplicatedClickstreamDf,REDIRECTION_SOURCE)
     val consistentItemDf : DataFrame = consistentNaming(deduplicatedItemDf,DEPARTMENT_NAME)
     logInfo("Specified data columns conversion to consistent naming  complete.")
+//    scala.io.StdIn.readLine()
 //    consistentNameClickstreamDf.show()
 //    consistentItemDf.show()
 //    println("Converting to lower case")
@@ -86,9 +91,11 @@ object PipelineService extends Logging
     /**************************Join Dataframes ****************************************************************************/
     val jointDf : DataFrame = join(consistentNameClickstreamDf, consistentItemDf,JOIN_KEY,JOIN_TYPE)
     logInfo("Clickstream and Item data join complete.")
-//    jointDf.show()
+//   jointDf.show()
+    val duration = (System.nanoTime()-t11)/1e9d
+//    println(duration)
 //    println("Joining data")
-//    scala.io.StdIn.readLine()
+//      scala.io.StdIn.readLine()
 //    jointDf.explain()
 //    jointDf.show()
 //    println(jointDf.count())

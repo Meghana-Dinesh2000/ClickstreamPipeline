@@ -4,9 +4,9 @@ import com.igniteplus.data.pipeline.constants.ApplicationConstants._
 import com.igniteplus.data.pipeline.dqchecks.DqCheckMethods
 import com.igniteplus.data.pipeline.service.DbService.sqlWrite
 import org.apache.spark.sql.DataFrame
-import sun.java2d.marlin.MarlinUtils.logInfo
+import org.apache.spark.internal.Logging
 
-object DqCheckService {
+object DqCheckService extends Logging {
   def executeDqCheck() : Unit = {
 
 

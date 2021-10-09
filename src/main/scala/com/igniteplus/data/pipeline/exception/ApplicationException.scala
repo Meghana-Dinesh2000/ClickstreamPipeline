@@ -1,11 +1,9 @@
 package com.igniteplus.data.pipeline.exception
 
-class ApplicationException (message :String, cause:Throwable)extends Exception(message, cause)
-{
-  def this(message: String) = this(message,None.orNull)
-}
-case class FileReaderException(message: String) extends  ApplicationException(message)
-case class FileWriterException(message: String) extends  ApplicationException(message)
+class ApplicationException (message :String)extends Exception(message)
 
-case class DqDuplicateCheckException(message: String) extends ApplicationException(message)
-case class DqNullCheckException(message: String) extends ApplicationException(message)
+
+case class FileReaderException(message: String) extends ApplicationException(message:String)
+case class FileWriterException(message: String) extends  ApplicationException(message:String)
+case class DqDuplicateCheckException(message: String) extends ApplicationException(message:String)
+case class DqNullCheckException(message: String) extends ApplicationException(message:String)
